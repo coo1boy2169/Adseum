@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* Custom Pride Color Gradient */
+@layer base {
+  :root {
+
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 min-h-screen;
+  }
+}
+
+/* Custom Pride Button */
+@layer components {
+  .btn-pride {
+    @apply bg-linear-to-r from-pink-500 via-purple-500 to-blue-500 text-white font-bold py-3 px-8 rounded-full transform transition-all duration-300 hover:scale-105 hover:shadow-2xl
+           active:scale-95;
+  }
+  
+  .pride-border {
+    @apply border-4 border-transparent bg-clip-padding;
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(135deg, white,white, white,white, #d367e7, #732982);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  
+  .card-hover {
+    @apply transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+  }
+}
+
+/* Smooth Animations */
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 
+           bg-clip-text text-transparent;
+  }
+}
