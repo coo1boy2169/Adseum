@@ -1,193 +1,455 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { translations } from '@/lib/translations';
 
 export default function ContactPage() {
   const [lang, setLang] = useState('nl');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [scrollY, setScrollY] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
   const t = translations[lang];
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Hier kan later echte form submission logica komen
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
       setFormData({ name: '', email: '', message: '' });
-    }, 3000);
+    }, 4000);
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
     <>
       <Header lang={lang} setLang={setLang} />
       
-      <main className="pt-24 min-h-screen">
-        {/* Hero Banner */}
-        <section className="relative bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 py-20 mb-12">
-          <div className="container mx-auto px-4 text-center text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              {t.contact.title}
+      {/* Animated Background Particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: `${Math.random() * 100 + 50}px`,
+              height: `${Math.random() * 100 + 50}px`,
+              background: `radial-gradient(circle, 
+                hsl(${i * 18}, 80%, 70%), 
+                hsl(${i * 18 + 60}, 70%, 60%))`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              opacity: 0.3,
+              filter: 'blur(40px)',
+              animation: `float ${15 + Math.random() * 10}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <main className="pt-24 min-h-screen relative z-10">
+        {/* Hero Section */}
+        <section className="relative py-32 overflow-hidden">
+          <div 
+            className="container mx-auto px-4 text-center"
+            style={{
+              transform: `translateY(${scrollY * 0.3}px)`,
+              opacity: 1 - scrollY * 0.002,
+            }}
+          >
+            <h1 className="text-8xl md:text-9xl font-black mb-8">
+              {'CONTACT'.split('').map((letter, i) => (
+                <span
+                  key={i}
+                  className="inline-block"
+                  style={{
+                    animation: 'float 3s ease-in-out infinite, rainbow-text 8s linear infinite',
+                    animationDelay: `${i * 0.15}s`,
+                    transform: `
+                      translateY(${Math.sin(scrollY * 0.01 + i) * 25}px)
+                      rotateZ(${Math.sin(scrollY * 0.008 + i) * 12}deg)
+                    `,
+                    textShadow: `
+                      0 0 30px hsl(${(i * 60) % 360}, 80%, 60%),
+                      0 0 60px hsl(${(i * 60) % 360}, 80%, 60%)
+                    `,
+                  }}
+                >
+                  {letter}
+                </span>
+              ))}
             </h1>
-            <p className="text-xl md:text-2xl">
+
+            <p 
+              className="text-3xl font-light text-gray-700 mb-12"
+              style={{
+                transform: `translateY(${scrollY * 0.2}px)`,
+              }}
+            >
               {t.contact.description}
             </p>
+
+            {/* Emoji Line */}
+            <div className="flex justify-center gap-8 text-6xl">
+              {['💌', '✨', '🌈', '💝'].map((emoji, i) => (
+                <div
+                  key={i}
+                  className="animate-bounce"
+                  style={{
+                    animationDelay: `${i * 0.2}s`,
+                    animationDuration: '2.5s',
+                    transform: `scale(${1 + Math.sin(scrollY * 0.02 + i) * 0.2})`,
+                  }}
+                >
+                  {emoji}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        <div className="container mx-auto px-4 pb-20">
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        {/* Contact Form & Info Section */}
+        <div className="container mx-auto px-4 pb-32">
+          <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
             {/* Contact Form */}
-            <div className="bg-white rounded-2xl shadow-xl p-8 pride-border">
-              <h2 className="text-3xl font-bold gradient-text mb-6">
-                {lang === 'nl' ? 'Stuur een bericht' : 'Send a message'}
-              </h2>
+            <div
+              style={{
+                transform: `translateY(${Math.max(0, 200 - (scrollY - 400) * 0.6)}px) 
+                           rotateY(${(mousePos.x - window.innerWidth / 2) * 0.01}deg)`,
+                opacity: Math.min(1, (scrollY - 200) / 300),
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <div 
+                className="relative p-12 rounded-3xl shadow-2xl overflow-hidden"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                }}
+              >
+                {/* Animated Border */}
+                <div 
+                  className="absolute -inset-1 rounded-3xl blur-xl opacity-75"
+                  style={{
+                    background: 'linear-gradient(135deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982)',
+                    backgroundSize: '400% 400%',
+                    animation: 'gradient-shift 8s ease infinite',
+                    zIndex: -1,
+                  }}
+                />
 
-              {submitted ? (
-                <div className="bg-green-100 border-4 border-green-500 rounded-xl p-8 text-center">
-                  <div className="text-5xl mb-4">✓</div>
-                  <p className="text-2xl font-bold text-green-800">
-                    {lang === 'nl' ? 'Bericht verzonden!' : 'Message sent!'}
-                  </p>
-                  <p className="text-gray-700 mt-2">
-                    {lang === 'nl' 
-                      ? 'We nemen zo snel mogelijk contact met je op.' 
-                      : 'We will get back to you as soon as possible.'}
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      {t.contact.name}
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none transition-colors"
-                      placeholder={lang === 'nl' ? 'Jouw naam' : 'Your name'}
-                    />
+                <h2 
+                  className="text-5xl font-black mb-8 gradient-text"
+                  style={{
+                    animation: 'slideInLeft 0.6s ease',
+                  }}
+                >
+                  {lang === 'nl' ? 'Stuur Bericht' : 'Send Message'}
+                </h2>
+
+                {submitted ? (
+                  <div 
+                    className="text-center py-20"
+                    style={{
+                      animation: 'scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    }}
+                  >
+                    <div 
+                      className="text-9xl mb-6 animate-bounce"
+                      style={{
+                        filter: 'drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))',
+                      }}
+                    >
+                      ✓
+                    </div>
+                    <p className="text-4xl font-black gradient-text mb-4">
+                      {lang === 'nl' ? 'Verstuurd!' : 'Sent!'}
+                    </p>
+                    <p className="text-xl text-gray-600">
+                      {lang === 'nl' 
+                        ? 'We nemen zo snel mogelijk contact op!' 
+                        : "We'll get back to you ASAP!"}
+                    </p>
                   </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Name Field */}
+                    <div className="relative">
+                      <label className="block text-xl font-bold text-gray-800 mb-3">
+                        {t.contact.name}
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('name')}
+                        onBlur={() => setFocusedField(null)}
+                        required
+                        className="w-full px-6 py-4 text-lg border-4 rounded-2xl transition-all duration-300 focus:outline-none"
+                        placeholder={lang === 'nl' ? 'Jouw naam...' : 'Your name...'}
+                        style={{
+                          borderColor: focusedField === 'name' ? '#9D4EDD' : '#E5E7EB',
+                          transform: focusedField === 'name' ? 'scale(1.02)' : 'scale(1)',
+                          boxShadow: focusedField === 'name' 
+                            ? '0 10px 40px rgba(157, 78, 221, 0.3)' 
+                            : '0 4px 10px rgba(0, 0, 0, 0.1)',
+                        }}
+                      />
+                      {focusedField === 'name' && (
+                        <div 
+                          className="absolute -top-2 -right-2 text-4xl animate-spin-slow"
+                          style={{ animation: 'spin-slow 3s linear infinite' }}
+                        >
+                          ✨
+                        </div>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      {t.contact.email}
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none transition-colors"
-                      placeholder={lang === 'nl' ? 'jouw@email.com' : 'your@email.com'}
-                    />
-                  </div>
+                    {/* Email Field */}
+                    <div className="relative">
+                      <label className="block text-xl font-bold text-gray-800 mb-3">
+                        {t.contact.email}
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('email')}
+                        onBlur={() => setFocusedField(null)}
+                        required
+                        className="w-full px-6 py-4 text-lg border-4 rounded-2xl transition-all duration-300 focus:outline-none"
+                        placeholder={lang === 'nl' ? 'jouw@email.com' : 'your@email.com'}
+                        style={{
+                          borderColor: focusedField === 'email' ? '#4EA8DE' : '#E5E7EB',
+                          transform: focusedField === 'email' ? 'scale(1.02)' : 'scale(1)',
+                          boxShadow: focusedField === 'email' 
+                            ? '0 10px 40px rgba(78, 168, 222, 0.3)' 
+                            : '0 4px 10px rgba(0, 0, 0, 0.1)',
+                        }}
+                      />
+                      {focusedField === 'email' && (
+                        <div 
+                          className="absolute -top-2 -right-2 text-4xl animate-bounce"
+                        >
+                          💌
+                        </div>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      {t.contact.message}
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      rows="6"
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none transition-colors resize-none"
-                      placeholder={lang === 'nl' ? 'Jouw bericht...' : 'Your message...'}
-                    ></textarea>
-                  </div>
+                    {/* Message Field */}
+                    <div className="relative">
+                      <label className="block text-xl font-bold text-gray-800 mb-3">
+                        {t.contact.message}
+                      </label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('message')}
+                        onBlur={() => setFocusedField(null)}
+                        required
+                        rows="6"
+                        className="w-full px-6 py-4 text-lg border-4 rounded-2xl transition-all duration-300 focus:outline-none resize-none"
+                        placeholder={lang === 'nl' ? 'Jouw bericht...' : 'Your message...'}
+                        style={{
+                          borderColor: focusedField === 'message' ? '#FF69B4' : '#E5E7EB',
+                          transform: focusedField === 'message' ? 'scale(1.02)' : 'scale(1)',
+                          boxShadow: focusedField === 'message' 
+                            ? '0 10px 40px rgba(255, 105, 180, 0.3)' 
+                            : '0 4px 10px rgba(0, 0, 0, 0.1)',
+                        }}
+                      />
+                      {focusedField === 'message' && (
+                        <div 
+                          className="absolute -top-2 -right-2 text-4xl"
+                          style={{
+                            animation: 'float 2s ease-in-out infinite',
+                          }}
+                        >
+                          🌈
+                        </div>
+                      )}
+                    </div>
 
-                  <button type="submit" className="w-full btn-pride">
-                    {t.contact.send} ✉️
-                  </button>
-                </form>
-              )}
+                    {/* Submit Button */}
+                    <button 
+                      type="submit"
+                      className="w-full py-6 text-2xl font-black text-white rounded-2xl transform transition-all duration-500 hover:scale-105 relative overflow-hidden group"
+                      style={{
+                        background: 'linear-gradient(135deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982)',
+                        backgroundSize: '400% 400%',
+                        animation: 'gradient-shift 8s ease infinite',
+                        boxShadow: '0 15px 50px rgba(148, 0, 211, 0.5)',
+                      }}
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-3">
+                        {t.contact.send}
+                        <svg 
+                          className="w-8 h-8 transform group-hover:translate-x-2 transition-transform" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                      </span>
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
 
-            {/* Contact Info */}
-            <div className="space-y-8">
-              <div className="bg-white rounded-2xl shadow-xl p-8 pride-border">
-                <h2 className="text-3xl font-bold gradient-text mb-6">
-                  {t.contact.info}
-                </h2>
-                
-                <div className="space-y-6">
-                  {/* Email */}
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-3 rounded-lg">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-900">Email</h3>
-                      <a href="mailto:info@possum.com" className="text-purple-600 hover:text-purple-800">
-                        info@possum.com
-                      </a>
-                    </div>
+            {/* Contact Info Cards */}
+            <div 
+              className="space-y-8"
+              style={{
+                transform: `translateY(${Math.max(0, 300 - (scrollY - 400) * 0.6)}px)`,
+                opacity: Math.min(1, (scrollY - 300) / 300),
+              }}
+            >
+              {/* Email Card */}
+              <div 
+                className="group relative p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-105 cursor-pointer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                }}
+              >
+                <div 
+                  className="absolute -inset-0.5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #e40303, #ff8c00)',
+                    backgroundSize: '400% 400%',
+                    animation: 'gradient-shift 8s ease infinite',
+                  }}
+                />
+                <div className="relative flex items-start gap-6">
+                  <div 
+                    className="text-5xl p-4 rounded-2xl transform group-hover:scale-110 group-hover:rotate-12 transition-all"
+                    style={{
+                      background: 'linear-gradient(135deg, #e40303, #ff8c00)',
+                      boxShadow: '0 8px 30px rgba(228, 3, 3, 0.4)',
+                    }}
+                  >
+                    📧
                   </div>
-
-                  {/* Phone */}
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-3 rounded-lg">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-900">
-                        {lang === 'nl' ? 'Telefoon' : 'Phone'}
-                      </h3>
-                      <a href="tel:+31612345678" className="text-purple-600 hover:text-purple-800">
-                        +31 6 12345678
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Social Media */}
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-3 rounded-lg">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-900">Social Media</h3>
-                      <p className="text-purple-600">@PossumArt</p>
-                    </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-gray-900 mb-2">Email</h3>
+                    <a 
+                      href="mailto:info@padseum.com" 
+                      className="text-2xl font-bold gradient-text hover:underline"
+                    >
+                      info@adseum.com
+                    </a>
                   </div>
                 </div>
               </div>
 
-              {/* Opening Hours / Additional Info */}
-              <div className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold gradient-text mb-4">
-                  {lang === 'nl' ? 'Responstijd' : 'Response Time'}
-                </h3>
-                <p className="text-gray-700">
-                  {lang === 'nl' 
-                    ? 'Wij proberen binnen 24 uur te reageren op alle berichten. Voor dringende vragen kun je ook bellen!'
-                    : 'We try to respond to all messages within 24 hours. For urgent questions, you can also call!'}
-                </p>
+              {/* Phone Card */}
+              <div 
+                className="group relative p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-105 cursor-pointer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                  animationDelay: '0.1s',
+                }}
+              >
+                <div 
+                  className="absolute -inset-0.5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #ffed00, #008026)',
+                    backgroundSize: '400% 400%',
+                    animation: 'gradient-shift 8s ease infinite',
+                  }}
+                />
+                <div className="relative flex items-start gap-6">
+                  <div 
+                    className="text-5xl p-4 rounded-2xl transform group-hover:scale-110 group-hover:rotate-12 transition-all"
+                    style={{
+                      background: 'linear-gradient(135deg, #ffed00, #008026)',
+                      boxShadow: '0 8px 30px rgba(255, 237, 0, 0.4)',
+                    }}
+                  >
+                    📞
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-gray-900 mb-2">
+                      {lang === 'nl' ? 'Telefoon' : 'Phone'}
+                    </h3>
+                    <a 
+                      href="tel:+31612345678" 
+                      className="text-2xl font-bold gradient-text hover:underline"
+                    >
+                      +31 6 12345678
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Media Card */}
+              <div 
+                className="group relative p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-105 cursor-pointer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                  animationDelay: '0.2s',
+                }}
+              >
+                <div 
+                  className="absolute -inset-0.5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #24408e, #732982)',
+                    backgroundSize: '400% 400%',
+                    animation: 'gradient-shift 8s ease infinite',
+                  }}
+                />
+                <div className="relative">
+                  <div 
+                    className="text-5xl mb-4 inline-block p-4 rounded-2xl transform group-hover:scale-110 group-hover:rotate-12 transition-all"
+                    style={{
+                      background: 'linear-gradient(135deg, #24408e, #732982)',
+                      boxShadow: '0 8px 30px rgba(115, 41, 130, 0.4)',
+                    }}
+                  >
+                    🌐
+                  </div>
+                  <h3 className="text-3xl font-black text-gray-900 mb-4">Social Media</h3>
+                  <div className="flex gap-4">
+                    {['📷', '👍', '🐦'].map((emoji, i) => (
+                      <div
+                        key={i}
+                        className="text-4xl transform hover:scale-125 transition-transform cursor-pointer"
+                        style={{
+                          filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2))',
+                        }}
+                      >
+                        {emoji}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -195,6 +457,30 @@ export default function ContactPage() {
       </main>
 
       <Footer lang={lang} />
+
+      <style jsx>{`
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 }
