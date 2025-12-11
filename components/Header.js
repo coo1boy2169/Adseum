@@ -39,6 +39,12 @@ export default function Header({ lang, setLang }) {
           {t.nav.artwork}
         </Link>
         <Link 
+          href="/about" 
+          className="text-gray-700 hover:text-purple-600 font-semibold transition-colors"
+        >
+          {lang === 'nl' ? 'Over Ons' : 'About'}
+        </Link>
+        <Link 
           href="/contact" 
           className="text-gray-700 hover:text-purple-600 font-semibold transition-colors"
         >
@@ -93,6 +99,13 @@ export default function Header({ lang, setLang }) {
           onClick={() => setMobileMenuOpen(false)}
         >
           {t.nav.artwork}
+        </Link>
+        <Link 
+          href="/about" 
+          className="block text-gray-700 hover:text-purple-600 font-semibold py-2"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {lang === 'nl' ? 'Over Ons' : 'About'}
         </Link>
         <Link 
           href="/contact" 

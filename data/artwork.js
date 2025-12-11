@@ -9,7 +9,7 @@ export const artworks = [
       "nl": "Viering van diversiteit",
       "en": "Celebration of diversity"
     },
-    "image": "/artwork/piece1.jpg",
+    "image": "/uploads/portrait-1765454538995.avif",
     "year": 2024,
     "medium": {
       "nl": "Digitale kunst",
@@ -26,7 +26,7 @@ export const artworks = [
       "nl": "Liefde in al zijn vormen",
       "en": "Love in all its forms"
     },
-    "image": "/artwork/piece2.jpg",
+    "image": "/uploads/spectrum-1765454557212.jpg",
     "year": 2024,
     "medium": {
       "nl": "Mixed media",
@@ -66,22 +66,5 @@ export const artworks = [
       "en": "jajaj"
     },
     "id": 1765449455932
-  },
-  {
-    "title": {
-      "nl": "milan is raar",
-      "en": "da"
-    },
-    "description": {
-      "nl": "milan is een raar wezen ",
-      "en": "da"
-    },
-    "image": "/uploads/gayflag-1765449965601.jpg",
-    "year": 2025,
-    "medium": {
-      "nl": "milan",
-      "en": "da"
-    },
-    "id": 1765449988792
   }
 ];
