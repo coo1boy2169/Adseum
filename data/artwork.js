@@ -1,105 +1,87 @@
-// Artwork galerij data - Taco kan dit eenvoudig aanpassen
 export const artworks = [
   {
-    id: 1,
-    title: {
-      nl: 'Liefde is Liefde',
-      en: 'Love is Love'
+    "id": 1,
+    "title": {
+      "nl": "Liefde is Liefde",
+      "en": "Love is Love"
     },
-    description: {
-      nl: 'Een viering van diversiteit en inclusiviteit',
-      en: 'A celebration of diversity and inclusivity'
+    "description": {
+      "nl": "Viering van diversiteit",
+      "en": "Celebration of diversity"
     },
-    image: '/images/loveislove.jpg',
-    year: 2024,
-    medium: {
-      nl: 'Digitale kunst',
-      en: 'Digital art'
+    "image": "/artwork/piece1.jpg",
+    "year": 2024,
+    "medium": {
+      "nl": "Digitale kunst",
+      "en": "Digital art"
     }
   },
   {
-    id: 2,
-    title: {
-      nl: 'Man op strand',
-      en: 'Man on Beach'
+    "id": 2,
+    "title": {
+      "nl": "Regenboog Hart",
+      "en": "Rainbow Heart"
     },
-    description: {
-      nl: 'Symboliseert het vrijheid van het wereld',
-      en: 'Symbolizes the freedom of the world'
+    "description": {
+      "nl": "Liefde in al zijn vormen",
+      "en": "Love in all its forms"
     },
-    image: '/images/man.jpeg',
-    year: 2024,
-    medium: {
-      nl: 'Mixed media',
-      en: 'Mixed media'
+    "image": "/artwork/piece2.jpg",
+    "year": 2024,
+    "medium": {
+      "nl": "Mixed media",
+      "en": "Mixed media"
     }
   },
   {
-    id: 3,
-    title: {
-      nl: 'Pride Portret',
-      en: 'Pride Portrait'
+    "title": {
+      "nl": "test",
+      "en": "test"
     },
-    description: {
-      nl: 'Expressie van authenticiteit en trots',
-      en: 'Expression of authenticity and pride'
+    "description": {
+      "nl": "test",
+      "en": "test"
     },
-    image: '/images/portrait.avif',
-    year: 2023,
-    medium: {
-      nl: 'Acryl op canvas',
-      en: 'Acrylic on canvas'
-    }
+    "image": "/images/achterkant.jpg",
+    "year": 2025,
+    "medium": {
+      "nl": "test",
+      "en": "test"
+    },
+    "id": 1764845567065
   },
   {
-    id: 4,
-    title: {
-      nl: 'Spectrum',
-      en: 'Spectrum'
+    "title": {
+      "nl": "gayvlag",
+      "en": "gayflag"
     },
-    description: {
-      nl: 'Een kleurrijke reis door identiteit',
-      en: 'A colorful journey through identity'
+    "description": {
+      "nl": "dwacaawd",
+      "en": "dadadad"
     },
-    image: '/images/spectrum.jpg',
-    year: 2023,
-    medium: {
-      nl: 'Digitale kunst',
-      en: 'Digital art'
-    }
+    "image": "/images/gayflag.jpg",
+    "year": 2025,
+    "medium": {
+      "nl": "ajaja",
+      "en": "jajaj"
+    },
+    "id": 1765449455932
   },
   {
-    id: 5,
-    title: {
-      nl: 'Eenheid',
-      en: 'Unity'
+    "title": {
+      "nl": "milan is raar",
+      "en": "da"
     },
-    description: {
-      nl: 'Samen staan we sterk',
-      en: 'Together we stand strong'
+    "description": {
+      "nl": "milan is een raar wezen ",
+      "en": "da"
     },
-    image: '/images/samenwerken.jpg',
-    year: 2024,
-    medium: {
-      nl: 'Collage',
-      en: 'Collage'
-    }
-  },
-  {
-    id: 6,
-    title: {
-      nl: 'Vrijheid',
-      en: 'Freedom'
+    "image": "/uploads/gayflag-1765449965601.jpg",
+    "year": 2025,
+    "medium": {
+      "nl": "milan",
+      "en": "da"
     },
-    description: {
-      nl: 'De vrijheid om jezelf te zijn',
-      en: 'The freedom to be yourself'
-    },
-    image: '/artwork/piece6.jpg',
-    year: 2024,
-    medium: {
-      nl: 'Aquarel',
-      en: 'Watercolor'
-    }
+    "id": 1765449988792
   }
 ];

@@ -44,28 +44,7 @@ export default function ContactPage() {
     <>
       <Header lang={lang} setLang={setLang} />
       
-      {/* Animated Background Particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: `${Math.random() * 100 + 50}px`,
-              height: `${Math.random() * 100 + 50}px`,
-              background: `radial-gradient(circle, 
-                hsl(${i * 18}, 80%, 70%), 
-                hsl(${i * 18 + 60}, 70%, 60%))`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.3,
-              filter: 'blur(40px)',
-              animation: `float ${15 + Math.random() * 10}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div>
+     
 
       <main className="pt-24 min-h-screen relative z-10">
         {/* Hero Section */}

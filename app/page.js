@@ -12,10 +12,20 @@ export default function Home() {
   const [lang, setLang] = useState('nl');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef(null);
   const productsRef = useRef(null);
   const artworkRef = useRef(null);
   const t = translations[lang];
+
+  useEffect(() => {
+    // Simuleer loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -40,6 +50,67 @@ export default function Home() {
 
   return (
     <>
+      {/* Loading Screen with Logo Animation */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white overflow-hidden">
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100" />
+          
+          {/* Content */}
+          <div className="relative z-10 text-center">
+            {/* Rotating Logo Animation */}
+            <div className="mb-12 flex justify-center">
+              <div 
+                className="h-40 md:h-56 w-40 md:w-56 flex items-center justify-center"
+                style={{
+                  animation: 'logo-spin 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                }}
+              >
+                <img 
+                  src="/images/logoD.png"
+                  alt="ADSEUM Loading"
+                  className="h-full w-full object-contain"
+                  style={{
+                    filter: 'drop-shadow(0 10px 30px rgba(138, 43, 226, 0.4))',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Loading Text */}
+            <h1 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-pulse">
+              ADSEUM
+            </h1>
+
+            {/* Animated loading bar */}
+            <div className="w-64 md:w-80 h-2 bg-gray-200 rounded-full overflow-hidden mx-auto">
+              <div 
+                className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 rounded-full"
+                style={{
+                  animation: 'loading-bar 2.5s ease-in-out infinite',
+                }}
+              />
+            </div>
+
+            {/* Loading dots */}
+            <div className="flex justify-center gap-2 mt-8">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="w-3 h-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500"
+                  style={{
+                    animation: `dot-bounce 1.4s infinite`,
+                    animationDelay: `${i * 0.2}s`,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Style tag removed - merged with main style tag at bottom */}
+        </div>
+      )}
+
       <Header lang={lang} setLang={setLang} />
       
       {/* Animated Background Blobs */}
@@ -94,28 +165,24 @@ export default function Home() {
               opacity: 1 - scrollY * 0.002,
             }}
           >
-            {/* Floating Letters */}
-            <div className="mb-12 relative">
-              <h1 className="text-8xl md:text-9xl font-black tracking-tighter">
-                {'ADSEUM'.split('').map((letter, i) => (
-                  <span
-                    key={i}
-                    className="inline-block animate-float"
-                    style={{
-                      animationDelay: `${i * 0.1}s`,
-                      background: `linear-gradient(135deg, 
-                        hsl(${(i * 60) % 360}, 80%, 60%), 
-                        hsl(${(i * 60 + 60) % 360}, 80%, 70%))`,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      textShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                    }}
-                  >
-                    {letter}
-                  </span>
-                ))}
-              </h1>
+            {/* Logo with Animation */}
+            <div className="mb-12 relative flex justify-center group">
+              <div className="relative">
+                <img 
+                  src="/images/logoD.png"
+                  alt="ADSEUM Logo"
+                  className="h-48 md:h-80 object-contain animate-logo-entrance animate-logo-glow animate-logo-rotate"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                  }}
+                />
+                {/* Glow background effect */}
+                <div className="absolute inset-0 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" 
+                  style={{
+                    background: 'radial-gradient(circle, rgba(255, 20, 147, 0.6), rgba(138, 43, 226, 0.4))',
+                  }}
+                />
+              </div>
             </div>
 
             {/* 3D Rotating Hearts */}
@@ -376,6 +443,36 @@ export default function Home() {
           25% { transform: translate(20px, -50px) scale(1.1); }
           50% { transform: translate(-20px, 20px) scale(0.9); }
           75% { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        @keyframes logo-spin {
+          0% {
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+          }
+          60% {
+            transform: rotate(360deg) scale(1.1);
+            opacity: 1;
+          }
+          85% {
+            transform: rotate(360deg) scale(1.05);
+            opacity: 1;
+          }
+          100% {
+            transform: rotate(360deg) scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes loading-bar {
+          0% { width: 0%; }
+          50% { width: 100%; }
+          100% { width: 0%; }
+        }
+
+        @keyframes dot-bounce {
+          0%, 100% { transform: translateY(0); opacity: 0.5; }
+          50% { transform: translateY(-15px); opacity: 1; }
         }
 
         .animate-blob {

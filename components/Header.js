@@ -15,7 +15,7 @@ export default function Header({ lang, setLang }) {
     <div className="flex items-center justify-between">
       {/* Logo */}
       <Link href="/" className="flex items-center space-x-3 group">
-        <img src="/images/logoA.png" alt="Adseum Logo" className="w-50 h-25" />
+        <img src="/images/logoA.png" alt="Adseum Logo" className="w-50 h-30" />
       </Link>
 
       {/* Desktop Navigation */}
