@@ -13,6 +13,7 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const t = translations[lang];
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -20,6 +21,8 @@ export default function ContactPage() {
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
+  
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -114,7 +117,7 @@ export default function ContactPage() {
             <div
               style={{
                 transform: `translateY(${Math.max(0, 200 - (scrollY - 400) * 0.6)}px) 
-                           rotateY(${(mousePos.x - window.innerWidth / 2) * 0.01}deg)`,
+                           rotateY(${(mousePos.x - dimensions.width / 2) * 0.01}deg)`,
                 opacity: Math.min(1, (scrollY - 200) / 300),
                 transformStyle: 'preserve-3d',
               }}

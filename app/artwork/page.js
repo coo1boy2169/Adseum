@@ -13,12 +13,16 @@ export default function ArtworkPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const t = translations[lang];
 
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
+
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -140,9 +144,9 @@ export default function ArtworkPage() {
                   style={{
                     transform: `
                       translateY(${Math.max(0, 400 - (scrollY - 600) * 0.6 - rowPos * 100)}px)
-                      translateX(${(mousePos.x - window.innerWidth / 2) * (0.01 + colPos * 0.005)}px)
-                      rotateY(${(mousePos.x - window.innerWidth / 2) * 0.02}deg)
-                      rotateX(${-(mousePos.y - window.innerHeight / 2) * 0.02}deg)
+                      translateX(${(mousePos.x - dimensions.width / 2) * (0.01 + colPos * 0.005)}px)
+                      rotateY(${(mousePos.x - dimensions.width / 2) * 0.02}deg)
+                      rotateX(${-(mousePos.y - dimensions.height / 2) * 0.02}deg)
                       scale(${Math.min(1, 0.7 + (scrollY - 400 - rowPos * 100) / 400)})
                     `,
                     opacity: Math.min(1, (scrollY - 300 - rowPos * 80) / 300),

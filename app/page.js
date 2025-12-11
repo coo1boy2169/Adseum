@@ -17,6 +17,7 @@ export default function Home() {
   const productsRef = useRef(null);
   const artworkRef = useRef(null);
   const t = translations[lang];
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     // Simuleer loading time
@@ -38,6 +39,8 @@ export default function Home() {
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
+
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -276,7 +279,7 @@ export default function Home() {
                   className="group relative"
                   style={{
                     transform: `translateY(${Math.max(0, 200 - (scrollY - 400) * 0.5 - i * 50)}px) 
-                               rotateY(${(mousePos.x - window.innerWidth / 2) * 0.01}deg)`,
+                               rotateY(${(mousePos.x - dimensions.width / 2) * 0.01}deg)`,
                     opacity: Math.min(1, (scrollY - 300) / 300),
                     transformStyle: 'preserve-3d',
                   }}
