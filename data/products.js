@@ -30,5 +30,21 @@ export const products = [
     ],
     "category": "merchandise",
     "id": 1764845410280
+  },
+  {
+    "name": {
+      "nl": "schilderij",
+      "en": "painting"
+    },
+    "description": {
+      "nl": "schilderrij test",
+      "en": "painting test "
+    },
+    "price": 69,
+    "images": [
+      "/uploads/kunstvoor-1765794960382.webp"
+    ],
+    "category": "prints",
+    "id": 1765794964982
   }
 ];

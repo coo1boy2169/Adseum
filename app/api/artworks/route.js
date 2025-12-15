@@ -7,13 +7,13 @@ export async function GET() {
   try {
     const filePath = path.join(DATA_DIR, 'artwork.js');
     const content = await fs.readFile(filePath, 'utf8');
-    
+
     // Parse the export from the file
     const match = content.match(/export const artworks = \[([\s\S]*)\];/);
     if (match) {
       return Response.json({ success: true, data: match[0] });
     }
-    
+
     return Response.json({ success: false, error: 'Could not parse artworks' }, { status: 400 });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
@@ -23,19 +23,19 @@ export async function GET() {
 export async function POST(request) {
   try {
     const { artworks } = await request.json();
-    
+
     if (!artworks || !Array.isArray(artworks)) {
       return Response.json({ success: false, error: 'Invalid artworks data' }, { status: 400 });
     }
 
     const filePath = path.join(DATA_DIR, 'artwork.js');
-    
+
     // Create the new file content
     const fileContent = `export const artworks = ${JSON.stringify(artworks, null, 2)};
 `;
 
     await fs.writeFile(filePath, fileContent, 'utf8');
-    
+
     return Response.json({ success: true, message: 'Artworks updated successfully' });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
