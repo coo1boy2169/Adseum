@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { translations } from '@/lib/translations';
+import AddButton from './AddButton';
 
 export default function ProductCard({ product, lang }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [addedToCart, setAddedToCart] = useState(false);
   const t = translations[lang];
 
   const nextImage = () => {
@@ -20,11 +20,7 @@ export default function ProductCard({ product, lang }) {
     );
   };
 
-  const handleAddToCart = () => {
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2000);
-    // Hier kan later echte winkelwagen logica komen
-  };
+  
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden card-hover pride-border">
@@ -91,16 +87,7 @@ export default function ProductCard({ product, lang }) {
           <div className="text-3xl font-bold gradient-text">
             €{product.price.toFixed(2)}
           </div>
-          <button 
-            onClick={handleAddToCart}
-            className={`${
-              addedToCart 
-                ? 'bg-green-500' 
-                : 'bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500'
-            } text-white px-6 py-2 rounded-full font-semibold transform transition-all hover:scale-105 active:scale-95`}
-          >
-            {addedToCart ? '✓ ' + (lang === 'nl' ? 'Toegevoegd!' : 'Added!') : t.shop.addToCart}
-          </button>
+          <AddButton product={product} t={t} />
         </div>
 
         {/* Category Badge */}

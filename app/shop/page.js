@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { products } from '@/data/products';
 import { translations } from '@/lib/translations';
+import AddButton from '@/components/AddButton';
 
 export default function ShopPage() {
   const [lang, setLang] = useState('nl');
@@ -36,25 +37,6 @@ export default function ShopPage() {
   return (
     <>
       <Header lang={lang} setLang={setLang} />
-      
-      {/* Animated Blob Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob"
-            style={{
-              background: `radial-gradient(circle, 
-                hsl(${i * 60}, 80%, 60%), 
-                hsl(${i * 60 + 30}, 70%, 70%))`,
-              left: `${(i * 15) % 80}%`,
-              top: `${(i * 25) % 80}%`,
-              animationDelay: `${i * 0.7}s`,
-              animationDuration: `${20 + i * 2}s`,
-            }}
-          />
-        ))}
-      </div>
 
       <main className="pt-24 min-h-screen relative z-10">
         {/* Hero Section with Scroll Animation */}
@@ -149,7 +131,7 @@ export default function ShopPage() {
                 
                 {selectedCategory !== category && (
                   <div 
-                    className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-20 transition-opacity"
+                    className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none"
                     style={{
                       backgroundSize: '400% 400%',
                       animation: 'gradient-shift 8s ease infinite',
@@ -180,26 +162,11 @@ export default function ShopPage() {
                     transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   }}
                 >
-                  {/* Card Container */}
-                  <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl">
-                    {/* Animated Border */}
+                  {/* Card Container - VEREENVOUDIGD ZOALS HOME PAGE */}
+                  <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-purple-500/50">
+                    {/* Glowing Overlay - pointer-events-none is CRUCIAAL */}
                     <div 
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
-                      style={{
-                        background: 'linear-gradient(135deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982)',
-                        backgroundSize: '400% 400%',
-                        animation: 'gradient-shift 8s ease infinite',
-                        padding: '4px',
-                        borderRadius: '1.5rem',
-                        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                        WebkitMaskComposite: 'xor',
-                        maskComposite: 'exclude',
-                      }}
-                    />
-
-                    {/* Glowing Overlay */}
-                    <div 
-                      className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
+                      className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
                       style={{
                         backgroundSize: '400% 400%',
                         animation: 'gradient-shift 10s ease infinite',
@@ -211,7 +178,7 @@ export default function ShopPage() {
                       <img 
                         src={product.images[0]}
                         alt={product.name[lang]}
-                        className="w-full h-full object-cover transform group-hover:scale-125 group-hover:rotate-3 transition-all duration-1000"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                         onError={(e) => {
                           const colors = ['FF1493', '9D4EDD', '4EA8DE', 'FFD700', '00CED1', 'FF69B4'];
                           e.target.src = `https://via.placeholder.com/600x800/${colors[i % colors.length]}/FFFFFF?text=${encodeURIComponent(product.name.en)}`;
@@ -241,21 +208,9 @@ export default function ShopPage() {
                       </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="p-8 relative z-10">
-                      <h3 
-                        className="text-3xl font-black mb-3 group-hover:text-transparent group-hover:bg-clip-text transition-all"
-                        style={{
-                          background: hoveredProduct === product.id 
-                            ? 'linear-gradient(135deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982)'
-                            : 'none',
-                          backgroundSize: '400% 400%',
-                          animation: hoveredProduct === product.id ? 'gradient-shift 8s ease infinite' : 'none',
-                          WebkitBackgroundClip: hoveredProduct === product.id ? 'text' : 'unset',
-                          WebkitTextFillColor: hoveredProduct === product.id ? 'transparent' : 'inherit',
-                          backgroundClip: hoveredProduct === product.id ? 'text' : 'unset',
-                        }}
-                      >
+                    {/* Content Section - GEEN z-index problemen */}
+                    <div className="p-8 relative">
+                      <h3 className="text-3xl font-black mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                         {product.name[lang]}
                       </h3>
 
@@ -263,19 +218,10 @@ export default function ShopPage() {
                         {product.description[lang]}
                       </p>
 
-                      {/* Add to Cart Button */}
-                      <button 
-                        className="w-full py-4 text-xl font-bold text-white rounded-full transform transition-all duration-500 group-hover:shadow-2xl relative overflow-hidden"
-                        style={{
-                          background: 'linear-gradient(135deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982)',
-                          backgroundSize: '400% 400%',
-                          animation: 'gradient-shift 8s ease infinite',
-                        }}
-                      >
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          🛒 {t.shop.addToCart}
-                        </span>
-                      </button>
+                      {/* Add to Cart Button - Nu klikbaar! */}
+                      <div className="w-full">
+                        <AddButton product={product} t={t} />
+                      </div>
 
                       {/* Multiple Images Indicator */}
                       {product.images.length > 1 && (
@@ -349,6 +295,13 @@ export default function ShopPage() {
       </main>
 
       <Footer lang={lang} />
+
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
     </>
   );
 }

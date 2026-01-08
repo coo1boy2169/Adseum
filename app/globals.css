@@ -24,6 +24,50 @@
   }
 }
 
+/* Make interactive elements show pointer */
+button, .btn-pride, .magnetic-btn, input[type="button"], input[type="submit"], a.button {
+  cursor: pointer;
+}
+
+/* Ensure main interactive UI sits above decorative backgrounds */
+header {
+  position: relative;
+  z-index: 60;
+}
+
+main, footer, .container {
+  position: relative;
+  z-index: 50;
+}
+
+/* Force interactive elements to accept pointer events */
+button, a, input, select, textarea {
+  pointer-events: auto;
+}
+
+/* Ensure buttons inside main containers are always clickable above decorative layers */
+.container button,
+.container a.button,
+.group button,
+.group a,
+.product-card button,
+.product-card a,
+.AddButton,
+.btn-pride {
+  position: relative !important;
+  z-index: 70 !important;
+  pointer-events: auto !important;
+}
+
+/* Small fade-in animation for toast popup */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 220ms ease;
+}
+
 /* Custom Cursor */
 .custom-cursor {
   position: fixed;

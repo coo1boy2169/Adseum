@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { translations } from '@/lib/translations';
+import { useCart } from '@/components/CartProvider';
 
 export default function Header({ lang, setLang }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang];
+  const { cartCount } = useCart();
 
   return (
      <header className="bg-white/80 backdrop-blur-lg shadow-lg">
@@ -31,6 +33,14 @@ export default function Header({ lang, setLang }) {
           className="text-gray-700 hover:text-purple-600 font-semibold transition-colors"
         >
           {t.nav.shop}
+        </Link>
+        <Link href="/cart" className="relative text-gray-700 hover:text-purple-600 font-semibold transition-colors">
+          🛒
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-3 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+              {cartCount}
+            </span>
+          )}
         </Link>
         <Link 
           href="/artwork" 
